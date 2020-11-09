@@ -1,4 +1,5 @@
 import unittest
+from credentials import USERENROLLED, PASSENROLLED, USERDEFAULT, PASSDEFAULT
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
