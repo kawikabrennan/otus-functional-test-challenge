@@ -23,11 +23,10 @@ class BaseSetUp(unittest.TestCase):
             "otus-input-1").send_keys(self.user)
         self.driver.find_element_by_id(
             "otus-input-3").send_keys(self.password)
-        buttons = self.driver.find_elements_by_class_name("btn-login")
-        buttons[0].click()
+        self.driver.find_element_by_class_name("btn-login").click()
 
     def tearDown(self):
-        sleep(5)
+        sleep(3)
         self.driver.close()
 
 
@@ -36,18 +35,41 @@ class UnenrolledTests(BaseSetUp, unittest.TestCase):
         unittest.TestCase.__init__(self, methodName)
         BaseSetUp.__init__(self, USERDEFAULT, PASSDEFAULT)
 
-    @unittest.skip("skipping tutorial test")
-    def test_search_in_python_org(self):
-        self.driver.get("http://www.python.org")
-        assert "Python" in self.driver.title
-        elem = self.driver.find_element_by_name("q")
-        elem.clear()
-        elem.send_keys("pycon")
-        elem.send_keys(Keys.RETURN)
-        assert "No results found." not in self.driver.page_source
+    def test_assessments_none_available(self):
+        """The Assessments table is empty."""
+        self.driver.find_element_by_xpath(
+            "//a/span[.='Assessments']").click()
+        assessments_table = self.driver.find_elements_by_xpath(
+            "//table/tbody/*"
+        )
 
-    def test_open_myotus(self):
-        self.assertTrue(5 == 5)
+        self.assertEqual(len(assessments_table), 0)
+
+    def test_bookshelf_add_link(self):
+        """A link is added to the resource table."""
+        self.driver.find_element_by_xpath(
+            "//a/span[.='Bookshelf']").click()
+        self.driver.find_element_by_xpath(
+            "//a/span[.='My Bookshelf']").click()
+        self.driver.find_element_by_xpath(
+            "//button/span/ot-icon[@name='plus']").click()
+
+        # self.assertEqual(len(assessments_table), 0)
+
+
+# class EnrolledTests(BaseSetUp, unittest.TestCase):
+#     def __init__(self, methodName="runTest"):
+#         unittest.TestCase.__init__(self, methodName)
+#         BaseSetUp.__init__(self, USERENROLLED, PASSENROLLED)
+
+#     def test_assessments_available(self):
+#         """The Assessments table is empty."""
+#         self.driver.find_element_by_xpath(
+#             "//a/span[.='Assessments']").click()
+#         assessments_table = self.driver.find_elements_by_xpath(
+#             "//table/tbody/*"
+#         )
+#         self.assertEqual(len(assessments_table), 1)
 
 
 if __name__ == "__main__":
