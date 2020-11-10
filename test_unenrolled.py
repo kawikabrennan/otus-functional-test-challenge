@@ -25,7 +25,7 @@ class UnenrolledTests(unittest.TestCase):
         cls.otus_home_page = "https://my.otus.com/"
         cls.otus_my_bookshelf = cls.otus_home_page + "bookshelf/my-bookshelf"
         cls.link_name = "Log In URL"
-        cls.edited_link_name = r'   ! @  # $%^&*()-_=+`~[{]}\\|;:\'", < . > /?  '
+        cls.edited_link_name = r'   !@#$%^&*()-_=+`~[{]}\|;:,<.>/?  '
 
         options = webdriver.ChromeOptions()
         options.add_argument('headless')
@@ -43,6 +43,7 @@ class UnenrolledTests(unittest.TestCase):
         self.driver.find_element_by_xpath(
             "//a/span[.='Assessments']").click()
 
+        # TODO: Investigate why wait doesn't occur properly. Sometimes the value is 9.
         wait_class_name_loads(self.driver, 10, "otus-large-table")
 
         assessments_table = self.driver.find_elements_by_xpath(
@@ -93,10 +94,27 @@ class UnenrolledTests(unittest.TestCase):
         rows = self.driver.find_elements_by_xpath(
             "//div[@class='bookshelf-list-resources']/table/tbody/tr[contains(.//td, i[contains(@class, 'fa-link')])]"
         )
-        print(len(rows))
+
         rows[0].find_element_by_xpath(".//td/button").click()
 
-        self.assertTrue(True)
+        self.driver.find_element_by_xpath(
+            "//div/span[.='Edit']").click()
+
+        text_field = self.driver.find_element_by_xpath(
+            f'//input[contains(@class,"bookshelf-edit-title__input")]')
+
+        text_field.clear()
+        text_field.send_keys(self.edited_link_name)
+
+        actions = ActionChains(self.driver)
+        actions.send_keys(Keys.TAB + Keys.ENTER)
+        actions.perform()
+
+        edited_link = self.driver.find_elements_by_xpath(
+            f'//div[@class="bookshelf-list-resources"]/table/tbody/tr[.="{self.edited_link_name}"]'
+        )
+
+        self.assertTrue(edited_link)
 
 
 if __name__ == "__main__":
