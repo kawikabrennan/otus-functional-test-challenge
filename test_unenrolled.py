@@ -24,6 +24,7 @@ class UnenrolledTests(unittest.TestCase):
     def setUpClass(cls):
         cls.otus_home_page = "https://my.otus.com/"
         cls.otus_my_bookshelf = cls.otus_home_page + "bookshelf/my-bookshelf"
+        cls.otus_my_classes = cls.otus_home_page + "classes/my-classes"
         cls.link_name = "Log In URL"
         cls.edited_link_name = r'   !@#$%^&*()-_=+`~[{]}\|;:,<.>/?  '
 
@@ -143,6 +144,16 @@ class UnenrolledTests(unittest.TestCase):
         # TODO: Why is the number of rows always 1 before and after the update
         for row in updated_rows:
             self.assertNotEqual(row.text, link_to_delete)
+
+    def test_classes_none_available(self):
+        """The Classes page is empty."""
+        self.driver.get(self.otus_my_classes)
+
+        classes = self.driver.find_elements_by_xpath(
+            "//div[@class='class-card']"
+        )
+
+        self.assertEqual(len(classes), 0)
 
 
 if __name__ == "__main__":
