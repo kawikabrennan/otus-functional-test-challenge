@@ -24,6 +24,8 @@ class UnenrolledTests(unittest.TestCase):
     def setUpClass(cls):
         cls.otus_home_page = "https://my.otus.com/"
         cls.otus_my_bookshelf = cls.otus_home_page + "bookshelf/my-bookshelf"
+        cls.link_name = "Log In URL"
+        cls.edited_link_name = r'   ! @  # $%^&*()-_=+`~[{]}\\|;:\'", < . > /?  '
 
         options = webdriver.ChromeOptions()
         options.add_argument('headless')
@@ -51,7 +53,6 @@ class UnenrolledTests(unittest.TestCase):
 
     def test_bookshelf_add_link(self):
         """A link is added to the resource table."""
-        link_name = "Log In URL"
 
         # TODO: Work on hover action instead of going directly to the page
         # element_to_hover_over = self.driver.find_element_by_xpath(
@@ -76,15 +77,26 @@ class UnenrolledTests(unittest.TestCase):
         text_fields = self.driver.find_elements_by_xpath(
             "//div[@class='otus-new-modal__wrapper']//input[@type='text']")
         text_fields[0].send_keys(self.otus_home_page)
-        text_fields[1].send_keys(link_name)
+        text_fields[1].send_keys(self.link_name)
 
         self.driver.find_element_by_xpath(
             "//button/span[contains(.,'Save')]").click()
 
         created_link = self.driver.find_element_by_xpath(
-            f'//table//span[.="{link_name}"]')
+            f'//table//span[.="{self.link_name}"]')
 
         self.assertTrue(created_link)
+
+    def test_bookshelf_edit_link_name(self):
+        """A link name can be edited in the resource table."""
+
+        rows = self.driver.find_elements_by_xpath(
+            "//div[@class='bookshelf-list-resources']/table/tbody/tr[contains(.//td, i[contains(@class, 'fa-link')])]"
+        )
+        print(len(rows))
+        rows[0].find_element_by_xpath(".//td/button").click()
+
+        self.assertTrue(True)
 
 
 if __name__ == "__main__":
