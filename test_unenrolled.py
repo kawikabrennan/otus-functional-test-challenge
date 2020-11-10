@@ -116,6 +116,34 @@ class UnenrolledTests(unittest.TestCase):
 
         self.assertTrue(edited_link)
 
+    def test_bookshelf_link_deletion(self):
+        """A link name can be deleted in the resource table."""
+        # TODO: Find a more elegant way to combat the race condition
+        sleep(2)
+
+        original_rows = self.driver.find_elements_by_xpath(
+            "//div[@class='bookshelf-list-resources']/table/tbody/tr[contains(.//td, i[contains(@class, 'fa-link')])]"
+        )
+
+        link_to_delete = original_rows[0].text
+
+        original_rows[0].find_element_by_xpath(".//td/button").click()
+        self.driver.find_element_by_xpath(
+            "//div/span[.='Delete']").click()
+        actions = ActionChains(self.driver)
+        sleep(2)
+        actions.send_keys(Keys.TAB + Keys.ENTER)
+        actions.perform()
+
+        sleep(2)
+        updated_rows = self.driver.find_elements_by_xpath(
+            "//div[@class='bookshelf-list-resources']/table/tbody/tr[contains(.//td, i[contains(@class, 'fa-link')])]"
+        )
+
+        # TODO: Why is the number of rows always 1 before and after the update
+        for row in updated_rows:
+            self.assertNotEqual(row.text, link_to_delete)
+
 
 if __name__ == "__main__":
     unittest.main()
