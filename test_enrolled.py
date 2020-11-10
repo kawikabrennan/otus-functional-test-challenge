@@ -1,5 +1,5 @@
 import unittest
-from credentials import USERENROLLED, PASSENROLLED, USERDEFAULT, PASSDEFAULT
+from credentials import USERENROLLED, PASSENROLLED
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from time import sleep
