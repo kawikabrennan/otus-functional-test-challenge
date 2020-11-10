@@ -17,6 +17,7 @@ class EnrolledTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        cls.enrolled_class = "QA Tech Challenge"
         cls.otus_home_page = "https://my.otus.com/"
         cls.otus_my_classes = cls.otus_home_page + "classes/my-classes"
 
@@ -48,7 +49,11 @@ class EnrolledTests(unittest.TestCase):
             "//div[@class='class-card']"
         )
 
+        current_class = classes[0].find_element_by_xpath(
+            ".//div[@class='class-card__title']/span")
+
         self.assertEqual(len(classes), 1)
+        self.assertEqual(self.enrolled_class, current_class.text)
 
 
 if __name__ == "__main__":
