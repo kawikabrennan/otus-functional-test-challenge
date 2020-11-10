@@ -25,6 +25,7 @@ class UnenrolledTests(unittest.TestCase):
         cls.otus_home_page = "https://my.otus.com/"
         cls.otus_my_bookshelf = cls.otus_home_page + "bookshelf/my-bookshelf"
         cls.otus_my_classes = cls.otus_home_page + "classes/my-classes"
+        cls.otus_lessons = cls.otus_home_page + "lesson"
         cls.link_name = "Log In URL"
         cls.edited_link_name = r'   !@#$%^&*()-_=+`~[{]}\|;:,<.>/?  '
 
@@ -154,6 +155,15 @@ class UnenrolledTests(unittest.TestCase):
         )
 
         self.assertEqual(len(classes), 0)
+
+    def test_lessons_none_available(self):
+        """The Lessons page is empty. TODO: Learn to check the notification"""
+        self.driver.get(self.otus_lessons)
+
+        lessons_table = self.driver.find_elements_by_xpath(
+            "//table/tbody/*"
+        )
+        self.assertEqual(len(lessons_table), 0)
 
 
 if __name__ == "__main__":

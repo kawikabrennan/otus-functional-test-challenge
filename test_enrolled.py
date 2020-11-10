@@ -20,6 +20,7 @@ class EnrolledTests(unittest.TestCase):
         cls.enrolled_class = "QA Tech Challenge"
         cls.otus_home_page = "https://my.otus.com/"
         cls.otus_my_classes = cls.otus_home_page + "classes/my-classes"
+        cls.otus_lessons = cls.otus_home_page + "lesson"
 
         options = webdriver.ChromeOptions()
         options.add_argument('headless')
@@ -54,6 +55,15 @@ class EnrolledTests(unittest.TestCase):
 
         self.assertEqual(len(classes), 1)
         self.assertEqual(self.enrolled_class, current_class.text)
+
+    def test_lessons_available(self):
+        """The Lessons page is empty. TODO: Learn to check the notification"""
+        self.driver.get(self.otus_lessons)
+
+        lessons_table = self.driver.find_elements_by_xpath(
+            "//table/tbody/*"
+        )
+        self.assertEqual(len(lessons_table), 1)
 
 
 if __name__ == "__main__":
