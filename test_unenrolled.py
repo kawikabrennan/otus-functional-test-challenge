@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
+from helper import wait_class_name_loads
 
 
 class UnenrolledTests(unittest.TestCase):
@@ -40,10 +41,7 @@ class UnenrolledTests(unittest.TestCase):
         self.driver.find_element_by_xpath(
             "//a/span[.='Assessments']").click()
 
-        WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, "otus-large-table"))
-        )
+        wait_class_name_loads(self.driver, 10, "otus-large-table")
 
         assessments_table = self.driver.find_elements_by_xpath(
             "//table/tbody/*"
@@ -73,10 +71,7 @@ class UnenrolledTests(unittest.TestCase):
         self.driver.find_element_by_xpath(
             "//div/span[.='Link']").click()
 
-        WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located(
-                (By.CLASS_NAME, "otus-new-modal__wrapper"))
-        )
+        wait_class_name_loads(self.driver, 10, "otus-new-modal__wrapper")
 
         text_fields = self.driver.find_elements_by_xpath(
             "//div[@class='otus-new-modal__wrapper']//input[@type='text']")
