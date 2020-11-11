@@ -1,6 +1,7 @@
 import unittest
 from credentials import USERDEFAULT, PASSDEFAULT
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -26,6 +27,7 @@ class UnenrolledTests(unittest.TestCase):
         cls.otus_my_bookshelf = cls.otus_home_page + "bookshelf/my-bookshelf"
         cls.otus_my_classes = cls.otus_home_page + "classes/my-classes"
         cls.otus_lessons = cls.otus_home_page + "lesson"
+        cls.otus_gradebook = cls.otus_home_page + "gradebook"
         cls.link_name = "Log In URL"
         cls.edited_link_name = r'   !@#$%^&*()-_=+`~[{]}\|;:,<.>/?  '
 
@@ -45,7 +47,7 @@ class UnenrolledTests(unittest.TestCase):
         self.driver.find_element_by_xpath(
             "//a/span[.='Assessments']").click()
 
-        # TODO: Investigate why wait doesn't occur properly. Sometimes the value is 9.
+        # TODO: Investigate why wait doesn't occur properly. Sometimes the actual result is 9.
         wait_class_name_loads(self.driver, 10, "otus-large-table")
 
         assessments_table = self.driver.find_elements_by_xpath(
@@ -164,6 +166,19 @@ class UnenrolledTests(unittest.TestCase):
             "//table/tbody/*"
         )
         self.assertEqual(len(lessons_table), 0)
+
+    def test_otus_grades_not_available(self):
+        """The Gradebook page is empty."""
+        self.driver.get(self.otus_gradebook)
+        contents = True
+
+        try:
+            self.driver.find_element_by_xpath(
+                "//*[@id='gradebook-page']"
+            )
+        except NoSuchElementException:
+            contents = False
+        self.assertFalse(contents)
 
 
 if __name__ == "__main__":

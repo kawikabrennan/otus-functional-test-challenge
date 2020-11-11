@@ -1,6 +1,7 @@
 import unittest
 from credentials import USERENROLLED, PASSENROLLED
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 from time import sleep
 
@@ -21,6 +22,7 @@ class EnrolledTests(unittest.TestCase):
         cls.otus_home_page = "https://my.otus.com/"
         cls.otus_my_classes = cls.otus_home_page + "classes/my-classes"
         cls.otus_lessons = cls.otus_home_page + "lesson"
+        cls.otus_gradebook = cls.otus_home_page + "gradebook"
         cls.lesson_name = "QA Technical Challenge"
 
         options = webdriver.ChromeOptions()
@@ -79,6 +81,19 @@ class EnrolledTests(unittest.TestCase):
         )
 
         self.assertEqual(len(lesson_cards), 3)
+
+    def test_otus_grades_available(self):
+        """The Gradebook page is not empty."""
+        self.driver.get(self.otus_gradebook)
+        contents = True
+
+        try:
+            self.driver.find_element_by_xpath(
+                "//*[@id='gradebook-page']"
+            )
+        except NoSuchElementException:
+            contents = False
+        self.assertTrue(contents)
 
 
 if __name__ == "__main__":
