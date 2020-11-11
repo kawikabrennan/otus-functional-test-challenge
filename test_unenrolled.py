@@ -51,7 +51,7 @@ class UnenrolledTests(unittest.TestCase):
         wait_class_name_loads(self.driver, 10, "otus-large-table")
 
         assessments_table = self.driver.find_elements_by_xpath(
-            "//table/tbody/*"
+            "//*[@id='outerWrapper']/otus-app/ot-theme-provider/main/div/div/ng-component/ng-component/ot-assess-list-student/div/div[2]/table/tbody/tr"
         )
 
         self.assertEqual(len(assessments_table), 0)

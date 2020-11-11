@@ -41,7 +41,7 @@ class EnrolledTests(unittest.TestCase):
         self.driver.find_element_by_xpath(
             "//a/span[.='Assessments']").click()
         assessments_table = self.driver.find_elements_by_xpath(
-            "//table/tbody/*"
+            "//*[@id='outerWrapper']/otus-app/ot-theme-provider/main/div/div/ng-component/ng-component/ot-assess-list-student/div/div[2]/table/tbody/tr"
         )
         self.assertEqual(len(assessments_table), 1)
 
@@ -94,6 +94,18 @@ class EnrolledTests(unittest.TestCase):
         except NoSuchElementException:
             contents = False
         self.assertTrue(contents)
+
+    def test_otus_grades_click_shows_analytics(self):
+        """Selecting the row that appears in the Gradebook make an analytics table appear."""
+        self.driver.find_element_by_xpath(
+            "//*[@id='gradebook-container']/ot-student-family-gradebook/div/div[3]/ot-student-gradebook-grid/div/ui-grid-action/div/div/div[1]/ag-grid-angular/div/div[1]/div/div[3]/div[1]/div/div/div"
+        ).click()
+
+        grade_details = self.driver.find_element_by_xpath(
+            "//*[@id='gradebook-container']/ot-student-family-gradebook/div/div[3]/ot-student-gradebook-grid/div/div"
+        )
+
+        self.assertTrue(grade_details)
 
 
 if __name__ == "__main__":
