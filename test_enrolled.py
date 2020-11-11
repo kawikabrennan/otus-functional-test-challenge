@@ -21,6 +21,7 @@ class EnrolledTests(unittest.TestCase):
         cls.otus_home_page = "https://my.otus.com/"
         cls.otus_my_classes = cls.otus_home_page + "classes/my-classes"
         cls.otus_lessons = cls.otus_home_page + "lesson"
+        cls.lesson_name = "QA Technical Challenge"
 
         options = webdriver.ChromeOptions()
         options.add_argument('headless')
@@ -57,13 +58,27 @@ class EnrolledTests(unittest.TestCase):
         self.assertEqual(self.enrolled_class, current_class.text)
 
     def test_lessons_available(self):
-        """The Lessons page is empty. TODO: Learn to check the notification"""
+        """The Lessons page has one lesson."""
         self.driver.get(self.otus_lessons)
 
         lessons_table = self.driver.find_elements_by_xpath(
             "//table/tbody/*"
         )
         self.assertEqual(len(lessons_table), 1)
+        self.assertTrue(self.lesson_name in lessons_table[0].text)
+
+    def test_lessons_can_be_viewed(self):
+        """The lesson is selectable and loads a new page."""
+        lessons_table = self.driver.find_elements_by_xpath(
+            "//table/tbody/*"
+        )
+        lessons_table[0].click()
+
+        lesson_cards = self.driver.find_elements_by_xpath(
+            "//lesson-card"
+        )
+
+        self.assertEqual(len(lesson_cards), 3)
 
 
 if __name__ == "__main__":
