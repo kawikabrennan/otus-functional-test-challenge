@@ -9,38 +9,14 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 from helper import wait_class_name_loads
+from base_classes import BaseTestSetUp
 
 
-class UnenrolledTests(unittest.TestCase):
-    @classmethod
-    def otus_login(cls):
-        cls.driver.get(cls.otus_home_page)
-        cls.driver.find_element_by_id(
-            "otus-input-1").send_keys(USERDEFAULT)
-        cls.driver.find_element_by_id(
-            "otus-input-3").send_keys(PASSDEFAULT)
-        cls.driver.find_element_by_class_name("btn-login").click()
-
+class UnenrolledTests(BaseTestSetUp):
     @classmethod
     def setUpClass(cls):
-        cls.otus_home_page = "https://my.otus.com/"
-        cls.otus_my_bookshelf = cls.otus_home_page + "bookshelf/my-bookshelf"
-        cls.otus_my_classes = cls.otus_home_page + "classes/my-classes"
-        cls.otus_lessons = cls.otus_home_page + "lesson"
-        cls.otus_gradebook = cls.otus_home_page + "gradebook"
-        cls.link_name = "Log In URL"
-        cls.edited_link_name = r'   !@#$%^&*()-_=+`~[{]}\|;:,<.>/?  '
-
-        options = webdriver.ChromeOptions()
-        options.add_argument('headless')
-        cls.driver = webdriver.Chrome()  # (chrome_options=options)
-        cls.driver.implicitly_wait(10)
-        cls.otus_login()
-
-    @classmethod
-    def tearDownClass(cls):
-        sleep(3)
-        cls.driver.close()
+        super(UnenrolledTests, cls).setUpClass()
+        cls.otus_login(USERDEFAULT, PASSDEFAULT)
 
     def test_assessments_none_available(self):
         """The Assessments table is empty."""
@@ -51,8 +27,7 @@ class UnenrolledTests(unittest.TestCase):
         wait_class_name_loads(self.driver, 10, "otus-large-table")
 
         assessments_table = self.driver.find_elements_by_xpath(
-            "//*[@id='outerWrapper']/otus-app/ot-theme-provider/main/div/div/ng-component/ng-component/ot-assess-list-student/div/div[2]/table/tbody/tr"
-        )
+            self.assessments_table_xpath)
 
         self.assertEqual(len(assessments_table), 0)
 

@@ -17,10 +17,17 @@ class BaseTestSetUp(unittest.TestCase):
     def setUpClass(cls):
         cls.enrolled_class = "QA Tech Challenge"
         cls.otus_home_page = "https://my.otus.com/"
+        cls.otus_my_bookshelf = cls.otus_home_page + "bookshelf/my-bookshelf"
         cls.otus_my_classes = cls.otus_home_page + "classes/my-classes"
         cls.otus_lessons = cls.otus_home_page + "lesson"
         cls.otus_gradebook = cls.otus_home_page + "gradebook"
         cls.lesson_name = "QA Technical Challenge"
+        cls.link_name = "Log In URL"
+        cls.edited_link_name = r'   !@#$%^&*()-_=+`~[{]}\|;:,<.>/?  '
+        cls.assessments_table_xpath = (
+            "//*[@id='outerWrapper']/otus-app/ot-theme-provider/main/div/div/ng-component/"
+            "ng-component/ot-assess-list-student/div/div[2]/table/tbody/tr"
+        )
 
         options = webdriver.ChromeOptions()
         options.add_argument('headless')
