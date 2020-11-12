@@ -12,9 +12,13 @@
 
 # Running
 
-* Update the credentials.py file with what will be used for testing.
+* **Update the credentials.py file with what will be used for testing.**
+  * Default - new student with no classes
+  * Enrolled - student enrolled in the interview class "QA Tech Challenge"
 * Major caveat - the enrolled student must be assigned to the class given in the interview.
-* run tests with 'python -m unittest test_selenium_otus.py'
+* There are two test files. Run tests with:
+  * 'python -m unittest test_enrolled.py'
+  * 'python -m unittest test_unenrolled.py'
 
 # Resources
 
