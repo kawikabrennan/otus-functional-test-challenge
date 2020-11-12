@@ -4,37 +4,14 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 from time import sleep
+from base_classes import BaseTestSetUp
 
 
-class EnrolledTests(unittest.TestCase):
-    @classmethod
-    def otus_login(cls):
-        cls.driver.get(cls.otus_home_page)
-        cls.driver.find_element_by_id(
-            "otus-input-1").send_keys(USERENROLLED)
-        cls.driver.find_element_by_id(
-            "otus-input-3").send_keys(PASSENROLLED)
-        cls.driver.find_element_by_class_name("btn-login").click()
-
+class EnrolledTests(BaseTestSetUp):
     @classmethod
     def setUpClass(cls):
-        cls.enrolled_class = "QA Tech Challenge"
-        cls.otus_home_page = "https://my.otus.com/"
-        cls.otus_my_classes = cls.otus_home_page + "classes/my-classes"
-        cls.otus_lessons = cls.otus_home_page + "lesson"
-        cls.otus_gradebook = cls.otus_home_page + "gradebook"
-        cls.lesson_name = "QA Technical Challenge"
-
-        options = webdriver.ChromeOptions()
-        options.add_argument('headless')
-        cls.driver = webdriver.Chrome()  # (chrome_options=options)
-        cls.driver.implicitly_wait(10)
-        cls.otus_login()
-
-    @classmethod
-    def tearDownClass(cls):
-        sleep(3)
-        cls.driver.close()
+        super(EnrolledTests, cls).setUpClass()
+        cls.otus_login(USERENROLLED, PASSENROLLED)
 
     def test_assessments_available(self):
         """The Assessments table has one assessment."""
