@@ -14,7 +14,7 @@ class EnrolledTests(BaseTestSetUp):
         cls.otus_login(USERENROLLED, PASSENROLLED)
 
     def test_assessments_available(self):
-        """The Assessments table has one assessment."""
+        """The Assessments table has one assessment. TODO: Investigate why the actual result is sometimes 0."""
         self.driver.find_element_by_xpath(
             "//a/span[.='Assessments']").click()
         assessments_table = self.driver.find_elements_by_xpath(
